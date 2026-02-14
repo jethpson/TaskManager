@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Your Tasks</h2>
+<button onclick="window.location.href='/tasks/new'">Add Task</button>
+<ul id="taskList"></ul>
+
+<script>
+async function loadTasks() {
+    const res = await fetch('/tasks/', {credentials: 'same-origin'});
+    if (!res.ok) {
+        document.getElementById('taskList').innerHTML = "Please log in to view tasks.";
+        return;
+    }
+    const data = await res.json();
+    const list = document.getElementById('taskList');
+    list.innerHTML = '';
+    data.tasks.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = `[${t.status}] ${t.title} - ${t.description} (Due: ${t.due_date || 'N/A'})`;
+        list.appendChild(li);
+    });
+}
+
+loadTasks();
+</script>
+{% endblock %}

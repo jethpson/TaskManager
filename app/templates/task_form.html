@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 id="formTitle">New Task</h2>
+<form id="taskForm">
+    <label>Title: <input type="text" name="title" required></label><br>
+    <label>Description: <input type="text" name="description"></label><br>
+    <label>Due Date: <input type="datetime-local" name="due_date"></label><br>
+    <label>Status:
+        <select name="status">
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+        </select>
+    </label><br>
+    <button type="submit">Save</button>
+</form>
+<div id="taskMessage"></div>
+
+<script>
+document.getElementById('taskForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = {
+        title: formData.get('title'),
+        description: formData.get('description'),
+        due_date: formData.get('due_date'),
+        status: formData.get('status')
+    };
+    const res = await fetch('/tasks/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+        credentials: 'same-origin'
+    });
+    const result = await res.json();
+    document.getElementById('taskMessage').innerText = result.message || 'Task saved!';
+    if (res.ok) window.location.href = '/';
+};
+</script>
+{% endblock %}

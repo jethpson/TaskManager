@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Register</h2>
+<form id="registerForm">
+    <label>Username: <input type="text" name="username" required></label><br>
+    <label>Email: <input type="email" name="email" required></label><br>
+    <label>Password: <input type="password" name="password" required></label><br>
+    <button type="submit">Register</button>
+</form>
+<div id="registerMessage"></div>
+
+<script>
+document.getElementById('registerForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password: formData.get('password')
+    };
+    const res = await fetch('/users/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+        credentials: 'same-origin'
+    });
+    const result = await res.json();
+    document.getElementById('registerMessage').innerText = result.message || result.error;
+    if (res.ok) window.location.href = '/login';
+};
+</script>
+{% endblock %}

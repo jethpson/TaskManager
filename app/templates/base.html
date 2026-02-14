@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('users.dashboard') }}">Dashboard</a>
+
+            {% if current_user.is_authenticated %}
+                <span>Welcome, {{ current_user.username }}!</span>
+                <a href="{{ url_for('users.logout_user_endpoint') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('users.login_page') }}">Login</a>
+                <a href="{{ url_for('users.register_page') }}">Register</a>
+            {% endif %}
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <hr>
+        <p>&copy; 2026 Task Manager</p>
+    </footer>
+</body>
+</html>
