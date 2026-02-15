@@ -137,6 +137,10 @@ pytest -v
 
 ---
 
+## StartBootstrap Resources
+
+[GitHub](https://github.com/StartBootstrap/startbootstrap-sb-admin)
+
 ## License
 
 This project is licensed under the MIT License.
