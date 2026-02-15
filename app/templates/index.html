@@ -1,23 +1,72 @@
 {% extends "base.html" %}
+
 {% block content %}
-<h2>Your Tasks</h2>
-<button onclick="window.location.href='/tasks/new'">Add Task</button>
-<ul id="taskList"></ul>
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container-fluid px-4 mt-4">
+            <h1 class="mt-4">Your Tasks</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+
+            <div class="mb-3">
+                <button class="btn btn-primary" onclick="window.location.href='/tasks/new'">Add Task</button>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-tasks me-1"></i>
+                    Task List
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped" id="tasksTable">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-center">Loading tasks...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 
 <script>
 async function loadTasks() {
-    const res = await fetch('/tasks/', {credentials: 'same-origin'});
+    const res = await fetch('/tasks/', { credentials: 'same-origin' });
+    const tableBody = document.querySelector('#tasksTable tbody');
+
     if (!res.ok) {
-        document.getElementById('taskList').innerHTML = "Please log in to view tasks.";
+        tableBody.innerHTML = "<tr><td colspan='4' class='text-danger text-center'>Please log in to view tasks.</td></tr>";
         return;
     }
+
     const data = await res.json();
-    const list = document.getElementById('taskList');
-    list.innerHTML = '';
+    tableBody.innerHTML = '';
+
+    if (data.tasks.length === 0) {
+        tableBody.innerHTML = "<tr><td colspan='4' class='text-center'>No tasks available.</td></tr>";
+        return;
+    }
+
     data.tasks.forEach(t => {
-        const li = document.createElement('li');
-        li.textContent = `[${t.status}] ${t.title} - ${t.description} (Due: ${t.due_date || 'N/A'})`;
-        list.appendChild(li);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${t.status}</td>
+            <td>${t.title}</td>
+            <td>${t.description}</td>
+            <td>${t.due_date || 'N/A'}</td>
+        `;
+        tableBody.appendChild(row);
     });
 }
 
