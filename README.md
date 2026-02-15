@@ -137,9 +137,9 @@ pytest -v
 
 ---
 
-## StartBootstrap Resources
+## Template Resources Used
 
-[GitHub](https://github.com/StartBootstrap/startbootstrap-sb-admin)
+[StartBootstrap Template GitHub](https://github.com/StartBootstrap/startbootstrap-sb-admin)
 
 ## License
 
